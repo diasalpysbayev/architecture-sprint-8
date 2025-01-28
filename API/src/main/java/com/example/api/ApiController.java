@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ApiController {
 
+    private final KeycloakService keycloakService;
+
+    public ApiController(KeycloakService keycloakService) {
+        this.keycloakService = keycloakService;
+    }
+
     @GetMapping("/reports")
-    public ResponseEntity<String> get(@RequestHeader(value = "Authorization", required = false) String header) {
-        if (header == null || !header.startsWith("Bearer ")) {
+    public ResponseEntity<String> get(@RequestHeader(value = "Authorization", required = false) String token) {
+        if (token == null || !keycloakService.validateToken(token)) {
             return ResponseEntity.status(401).body("UNAUTHORIZED");
         }
         return ResponseEntity.ok().body("SUCCESS");
