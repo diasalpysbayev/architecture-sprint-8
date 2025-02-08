@@ -13,9 +13,11 @@ public class KeycloakService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public boolean validateToken(String token) {
-        String url = "http://localhost:8080/realms/your-realm/protocol/openid-connect/token/introspect";
+        String url = "http://keycloak:8080/realms/your-realm/protocol/openid-connect/token/introspect";
 
         HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBasicAuth("client-id", "client-secret");
 
         Map<String, String> params = new HashMap<>();
         params.put("token", token);
